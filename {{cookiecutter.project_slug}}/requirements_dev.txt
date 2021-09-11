@@ -1,0 +1,15 @@
+pip==21.2.4
+bump2version==1.0.1
+wheel==0.37.0
+watchdog==2.1.5
+flake8==3.9.2
+tox==3.24.3
+coverage==5.5
+Sphinx==4.1.2
+twine==3.4.2
+{% if cookiecutter.command_line_interface|lower == 'click' -%}
+Click==8.0.1{% endif %}
+{% if cookiecutter.use_pytest == 'y' -%}
+pytest==6.2.5{% endif %}
+{% if cookiecutter.use_black == 'y' -%}
+black==21.8b0{% endif %}
