@@ -1,9 +1,9 @@
 # common - initialization, variables, functions
 
 project != basename $$(pwd)
-version != cat VERSION
+version != awk <$(project)/__init__.py -F\' '/^__version__/{print $$2}'
 python_src != find . -name \*.py
-other_src := $(call makefiles) LICENSE README.md VERSION pyproject.toml setup.cfg tox.ini
+other_src := $(call makefiles) LICENSE README.rst setup.cfg tox.ini
 src := $(python_src) $(other_src)
 
 # list make targets with descriptions
