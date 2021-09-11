@@ -4,7 +4,7 @@ docs: clean-docs ## generate Sphinx HTML documentation, including API docs
 	sphinx-apidoc -o docs/ {{ cookiecutter.project_slug }}
 	$(MAKE) -C docs html
 	$(MAKE) -C docs clean
-	$(BROWSER) docs/_build/html/index.html
+	$(browser) docs/_build/html/index.html
 
 clean-docs:
 	rm -f docs/{{ cookiecutter.project_slug }}.rst

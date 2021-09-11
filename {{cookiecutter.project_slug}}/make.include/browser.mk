@@ -7,8 +7,7 @@ from urllib.request import pathname2url
 
 webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
 endef
+
 export BROWSER_PYSCRIPT
 
-BROWSER := python -c "$$BROWSER_PYSCRIPT"
-
-define browser = $(shell python -c "$(BROWSER_PYSCRIPT)" $(1))
+browser := python -c "$$BROWSER_PYSCRIPT"

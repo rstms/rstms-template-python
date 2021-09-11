@@ -14,7 +14,7 @@ coverage: ## check code coverage quickly with the default Python
 	coverage run --source {{ cookiecutter.project_slug }} -m pytest
 	coverage report -m
 	coverage html
-	$(BROWSER) htmlcov/index.html
+	$(browser) htmlcov/index.html
 
 testls: ## show available test cases 
 	@echo $$($(foreach test,$(testfiles),grep '^def test_' $(test);)) |\
