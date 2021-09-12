@@ -1,7 +1,9 @@
+# lint / source format
+{%- if cookiecutter.formatter == 'yapf' %}
 # yapf - source formatter
  
-# run the formatter on any sources changed since the last run
-yapf-fmt: .fmt .style.yapf  
+# run the yapf formatter on any sources changed since the last run
+fmt: .fmt .style.yapf  
 .fmt: $(python_src)
 	@$(foreach s,$?,yapf -i -vv $(s) || exit;) 
 	@touch $@
@@ -18,8 +20,9 @@ yapf-fmt: .fmt .style.yapf
 	sort >>$@
 
 # remove version marker, forcing reformat of all python source 
-yapf-clean:
+fmt-clean:
 	rm -f .fmt
+	rm -r .style.yapf
 
 sed_delete_rule = /^\s*$(firstword $(subst =, ,$(1)))\s*=.*$$/d
 
@@ -38,5 +41,19 @@ split_before_dot=True
 split_before_expression_after_opening_paren=True
 split_before_first_argument=True
 endef
+{%- endif %}
+
+{%- if cookiecutter.use_lint == 'y' %}
+lint: ## check style with flake8
+	flake8 $(project) tests
+	{% if cookiecutter.formatter == 'black' %}
+	black --check $(project) tests
+	{%- endif %}
+{%- endif %}
+
+{%- if cookiecutter.formatter == 'black' %}
+fmt: ## blacken python sources
+	black $(project) tests
+{%- endif %}
 
 # vim:ft=make
