@@ -4,17 +4,16 @@
 
 {% if cookiecutter.use_pytest == 'y' -%}
 import pytest
+
 {% else %}
 import unittest
+
 {%- endif %}
 {%- if cookiecutter.command_line_interface|lower == 'click' %}
 from click.testing import CliRunner
 {%- endif %}
 
-from {{ cookiecutter.project_slug }} import __version__, {{ cookiecutter.project_slug }}
-{%- if cookiecutter.command_line_interface|lower == 'click' %}
-from {{ cookiecutter.project_slug }} import cli
-{%- endif %}
+from {{ cookiecutter.project_slug }} import __version__{% if cookiecutter.command_line_interface|lower == 'click' %}, cli{% endif %}, {{ cookiecutter.project_slug }}
 
 {%- if cookiecutter.use_pytest == 'y' %}
 
@@ -38,7 +37,7 @@ def test_content(response):
 
 def test_version():
     """Test reading version and module name"""
-    assert {{ cookiecutter.project_slug }}.__name__ == '{{ cookiecutter.project_slug }}.{{ cookiecutter.project_slug }}'
+    assert {{ cookiecutter.project_slug }}.__name__ == "{{ cookiecutter.project_slug }}.{{ cookiecutter.project_slug }}"
     assert __version__
     assert isinstance(__version__,str)
 
