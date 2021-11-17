@@ -68,7 +68,7 @@ Ready to contribute? Here's how to set up `{{ cookiecutter.project_slug }}` for 
 
     $ mkvirtualenv {{ cookiecutter.project_slug }}
     $ cd {{ cookiecutter.project_slug }}/
-    $ python setup.py develop
+    $ make dev
 
 4. Create a branch for local development::
 
@@ -79,11 +79,11 @@ Ready to contribute? Here's how to set up `{{ cookiecutter.project_slug }}` for 
 5. When you're done making changes, check that your changes pass flake8 and the
    tests, including testing other Python versions with tox::
 
-    $ flake8 {{ cookiecutter.project_slug }} tests
-    $ python setup.py test or pytest
-    $ tox
+    $ make lint
+    $ make test
+    $ make tox
 
-   To get flake8 and tox, just pip install them into your virtualenv.
+   flake8 and tox will have been installed into your virtualenv with `make dev`
 
 6. Commit your changes and push your branch to GitHub::
 
