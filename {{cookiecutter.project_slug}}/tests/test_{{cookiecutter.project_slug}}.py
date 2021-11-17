@@ -6,7 +6,7 @@
 import pytest
 {% else %}
 import unittest
-{%- endif %}
+{%- endif -%}
 {%- if cookiecutter.command_line_interface|lower == 'click' %}
 from click.testing import CliRunner
 {%- endif %}
@@ -38,6 +38,7 @@ def test_version():
     assert {{ cookiecutter.project_slug }}.__name__ == "{{ cookiecutter.project_slug }}.{{ cookiecutter.project_slug }}"
     assert __version__
     assert isinstance(__version__, str)
+
 
 def test_command_line_interface():
     """Test the CLI."""
