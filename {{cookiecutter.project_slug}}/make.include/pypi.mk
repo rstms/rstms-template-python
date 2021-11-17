@@ -5,7 +5,6 @@ dist: .dist ## create distributable files if sources have changed
 .dist:	gitclean test-all 
 	@echo Changed files: $?
 	@echo Building $(project)
-	#python setup.py sdist bdist_wheel
 	python -m build
 	@touch $@
 
