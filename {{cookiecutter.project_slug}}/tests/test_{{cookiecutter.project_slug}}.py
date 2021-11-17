@@ -4,7 +4,7 @@
 
 {% if cookiecutter.use_pytest == 'y' -%}
 import pytest
-{% else %}
+{%- else %}
 import unittest
 {%- endif -%}
 {%- if cookiecutter.command_line_interface|lower == 'click' %}
