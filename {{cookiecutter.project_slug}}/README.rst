@@ -6,7 +6,7 @@
 {% if is_open_source %}
 .. image:: https://img.shields.io/github/license/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}
         :alt: GitHub
-{% if cookiecutter.use_pypi_deployment_with_travis == 'y' or cookiecutter.deploy_to_pypy == 'y' %}
+{% if (cookiecutter.use_pypi_deployment_with_travis == 'y') or (cookiecutter.deploy_to_pypy == 'y') %}
 .. image:: https://img.shields.io/pypi/v/{{ cookiecutter.project_slug }}.svg
         :target: https://pypi.python.org/pypi/{{ cookiecutter.project_slug }}
 {%- endif %}
@@ -18,6 +18,7 @@
 .. image:: https://circleci.com/gh/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/tree/master.svg?style=shield
         :target: https://circleci.com/gh/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}/tree/master 
 {%- endif %}
+{% if cookiecutter.use_readthedocs_io == 'y' %}
 .. image:: https://readthedocs.org/projects/{{ cookiecutter.project_slug | replace("_", "-") }}/badge/?version=latest
         :target: https://{{ cookiecutter.project_slug | replace("_", "-") }}.readthedocs.io/en/latest/?version=latest
         :alt: Documentation Status
