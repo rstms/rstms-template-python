@@ -3,6 +3,7 @@
 {{ cookiecutter.project_name }}
 {% for _ in cookiecutter.project_name %}={% endfor %}
 
+{% if is_open_source %}
 .. image:: https://img.shields.io/github/license/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}
         :alt: GitHub
 
