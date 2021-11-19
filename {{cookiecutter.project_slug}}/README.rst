@@ -6,7 +6,7 @@
 {% if is_open_source %}
 .. image:: https://img.shields.io/github/license/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}
         :alt: GitHub
-{% if (cookiecutter.use_pypi_deployment_with_travis == 'y') or (cookiecutter.deploy_to_pypy == 'y') %}
+{% if (cookiecutter.use_pypi_deployment_with_travis == 'y') or (cookiecutter.deploy_to_pypi == 'y') %}
 .. image:: https://img.shields.io/pypi/v/{{ cookiecutter.project_slug }}.svg
         :target: https://pypi.python.org/pypi/{{ cookiecutter.project_slug }}
 {%- endif %}
