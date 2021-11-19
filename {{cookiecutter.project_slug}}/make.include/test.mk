@@ -26,7 +26,6 @@ testls: ## show available test cases
 .PHONY: tox
 tox: .tox ## test with tox if sources have changed
 .tox: $(src)
-	@echo Changed files: $?
 	tox
 	@touch $@
 

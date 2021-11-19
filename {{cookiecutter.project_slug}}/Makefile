@@ -1,7 +1,7 @@
 # top-level Makefile 
 
 uninstall: ## remove module from the local python environment
-	pip uninstall -y $(project)
+	pip uninstall -yqq $(project)
 
 install: ## install to the local environment from the source directory
 	pip install --use-feature=in-tree-build --upgrade .

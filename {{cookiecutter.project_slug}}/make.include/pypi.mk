@@ -3,7 +3,6 @@
 .PHONY: dist 
 dist: .dist ## create distributable files if sources have changed
 .dist:	gitclean test-all 
-	@echo Changed files: $?
 	@echo Building $(project)
 	python -m build
 	@touch $@
