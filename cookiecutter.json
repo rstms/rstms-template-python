@@ -13,6 +13,7 @@
   "deploy_to_private_repo": "n",
   "deploy_to_pypi": "y",
   "use_circleci": "y",
+  "use_travis": "n",
   "use_readthedocs_io": "y",
   "add_pyup_badge": "y",
   "command_line_interface": "Click",

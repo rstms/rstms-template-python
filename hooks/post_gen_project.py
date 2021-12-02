@@ -17,6 +17,10 @@ if __name__ == '__main__':
         cli_file = os.path.join('{{ cookiecutter.project_slug }}', 'cli.py')
         remove_file(cli_file)
 
+    if 'no' in '{{ cookiecutter.use_travis|lower }}':
+        travis_ini = os.path.join('{{ cookiecutter.project_slug }}', '.travis.yml')
+        remove_file(circleci_dir)
+
     if 'no' in '{{ cookiecutter.use_circleci|lower }}':
         circleci_dir = os.path.join('{{ cookiecutter.project_slug }}', '.circleci')
         remove_file(circleci_dir)
