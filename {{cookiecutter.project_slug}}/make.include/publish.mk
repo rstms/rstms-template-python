@@ -1,18 +1,19 @@
-# pypi - build package and publish to pypi
+# publish - build package and publish
 
 .PHONY: dist 
 dist: .dist ## create distributable files if sources have changed
-.dist:	gitclean test-all 
+.dist:	gitclean tox
 	@echo Building $(project)
-	python -m build
+	pip wheel -w wheels .
 	@touch $@
 
 # add a release tag to the current commit and git push it
 release: dist 
 	@echo pushing Release $(project) v$(version) to github...
-	git tag -a 'v$(version)' -m 'Release v$(version)'
+	git tag -f -a 'v$(version)' -m 'Release v$(version)'
 	git push origin 'v$(version)'
 	
+{%- if cookiecutter.deploy_to_pypi == 'y' %}
 # publish to pypi
 pypi-publish: release
 	$(call require_pypi_config)
@@ -30,9 +31,11 @@ pypi-check:
 	$(call require_pypi_config)
 	@echo '$(project) local=$(version) pypi=$(call check_pypi_version)'
 
-pypi-clean:
+{%- endif %}
+publish-clean:
 	rm -f .dist
 	rm -rf .tox
+{%- if cookiecutter.deploy_to_pypi == 'y' %}
 
 # functions
 define require_pypi_config =
@@ -47,3 +50,4 @@ $(if $(1),$(1),$(error $(2)))
 endef
 
 check_pypi_version = $(call check_null,$(pypi_version),PyPi version query failed)
+{%- endif %}

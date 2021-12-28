@@ -1,17 +1,17 @@
 # test - testing with pytest and tox
 
-options?=-x
-testfiles?=$(wildcard tests/test_*.py)
-options:=$(if $(test),$(options) -k $(test),$(options))
+options ?= -x --log-cli-level 30
+testfiles ?= $(wildcard tests/test_*.py)
+options := $(if $(test),$(options) -k $(test),$(options))
 
 test: ## run pytest;  example: make options=-svvvx test=cli test 
-	pytest $(options) $(testfiles)
+	env TESTING=1 pytest $(options) $(testfiles)
 
 debug: ## run pytest, dropping into pdb on exceptions or breakpoints
-	${MAKE} options="$(options) -xvvvs --pdb" test
+	${MAKE} options="$(options) --log-cli-level 0 -xvvvs --pdb" test
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source {{ cookiecutter.project_slug }} -m pytest
+	env TESTING=1 coverage run --source $(project) -m pytest
 	coverage report -m
 	coverage html
 	$(browser) htmlcov/index.html
