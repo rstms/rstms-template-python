@@ -17,7 +17,7 @@ coverage: ## check code coverage quickly with the default Python
 	$(browser) htmlcov/index.html
 
 testls: ## show available test cases 
-	@echo $$($(foreach test,$(testfiles),grep '^def test_' $(test);)) |\
+	@echo $$($(foreach test,$(testfiles),grep -o '^def test_[[:graph:]]*' $(test);)) |\
 	  tr ' ' '\n' | grep -v def | awk -F\( 'BEGIN{xi=0} {printf("%s",$$1);\
 	  if(++xi==3){xi=0; printf("\n");} else {printf("\t");}}' |\
 	  awk 'BEGIN{print ".TS\nbox,nowarn;\nl | l | l ." } {print} END{print ".TE";}' |\
