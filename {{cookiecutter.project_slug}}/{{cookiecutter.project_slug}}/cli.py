@@ -10,11 +10,23 @@ import click
 {%- endif %}
 
 {% if cookiecutter.command_line_interface|lower == 'click' %}
-@click.command()
-def main(args=None):
-    """Console script for {{cookiecutter.project_slug}}."""
+@click.command("{{cookiecutter.project_slug}}")
+@click.options("-d", "--debug", is_flag=True, help="debug mode")
+def cli(debug):
+
+    def exception_handler(
+        exception_type, exception, traceback, debug_hook=sys.excepthook
+    ):
+
+        if debug:
+            debug_hook(exception_type, exception, traceback)
+        else:
+            logger.critical(f"{exception_type.__name__}: {exception}")
+
+    sys.excepthook = exception_handler
+
+    """cli for {{cookiecutter.project_slug}}."""
     click.echo("Replace this message by putting your code into {{cookiecutter.project_slug}}.cli.main")
-    click.echo("See click documentation at https://click.palletsprojects.com/")
     return 0
 {%- endif %}
 {%- if cookiecutter.command_line_interface|lower == 'argparse' %}
@@ -31,4 +43,4 @@ def main():
 
 
 if __name__ == "__main__":
-    sys.exit(main())  # pragma: no cover
+    sys.exit(cli())  # pragma: no cover
