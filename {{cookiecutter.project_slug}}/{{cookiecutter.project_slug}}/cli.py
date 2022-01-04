@@ -11,7 +11,7 @@ import click
 
 {% if cookiecutter.command_line_interface|lower == 'click' %}
 @click.command("{{cookiecutter.project_slug}}")
-@click.options("-d", "--debug", is_flag=True, help="debug mode")
+@click.option("-d", "--debug", is_flag=True, help="debug mode")
 def cli(debug):
 
     def exception_handler(
