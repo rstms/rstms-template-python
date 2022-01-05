@@ -1,8 +1,11 @@
 # make clean targets
 
 # generate Sphinx HTML documentation, including API docs
-docs: clean-docs
+#
+install-docs:
 	pip install -U .[docs]
+
+docs: install-docs clean-docs
 	sphinx-apidoc -o docs/ $(project)
 	$(MAKE) -C docs html
 	$(browser) docs/_build/html/index.html

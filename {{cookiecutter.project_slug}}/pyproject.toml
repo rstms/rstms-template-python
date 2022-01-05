@@ -17,7 +17,7 @@ name = "{{ cookiecutter.project_slug }}"
 authors = [{name = "{{ cookiecutter.full_name }}", email = "{{ cookiecutter.email }}"}]
 readme = {file = "README.rst", content-type = "text/x-rst"}
 license = {file = "LICENSE"}
-keywords = "{{ cookiecutter.project_slug }}"
+keywords = ["{{ cookiecutter.project_slug }}"]
 classifiers = [
   "Intended Audience :: Developers",
 {%- set license_classifiers = {
@@ -71,7 +71,7 @@ profile = "black"
 collect_ignore = ['setup.py']
 {%- endif %}
 
-{%- if 'no' not in cookiecutter.command_line_interface|lower %}
+{% if 'no' not in cookiecutter.command_line_interface|lower %}
 [project.scripts]
 {{ cookiecutter.project_slug }} = "{{ cookiecutter.project_slug }}:cli"
 {%- endif %}
