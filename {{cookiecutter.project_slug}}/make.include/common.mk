@@ -1,7 +1,7 @@
 # common - initialization, variables, functions
 
-project != basename $$(pwd) | tr '-' '_'
-organization != git remote get-url origin | sed 's-.*:--;s-/.*--'
+project = {{ cookiecutter.project_slug }}
+organization = {{ cookiecutter.github_username }}
 branch != git branch | awk '/\*/{print $$2}'
 version != awk <$(project)/version.py -F\" '/^__version__/{print $$2}'
 python_src != find . -name \*.py
