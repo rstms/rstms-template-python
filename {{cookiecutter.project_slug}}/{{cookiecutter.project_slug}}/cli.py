@@ -11,7 +11,7 @@ import click
 
 {% if cookiecutter.command_line_interface|lower == 'click' %}
 @click.command("{{cookiecutter.project_slug}}")
-@click.version_option
+@click.version_option()
 @click.option("-d", "--debug", is_flag=True, help="debug mode")
 def cli(debug):
 
