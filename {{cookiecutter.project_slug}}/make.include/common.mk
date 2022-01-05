@@ -38,3 +38,9 @@ makefiles = Makefile $(wildcard make.include/*.mk)
 
 # return a list of matching include makefile targets
 included = $(foreach file,$(makefiles),$(shell sed <$(file) -n 's/^\([[:alnum:]_-]*-$(1)\):.*/\1/p;'))
+
+# break if not in virtualenv (override with make require_virtualenv=no <TARGET>)
+ifndef virtualenv
+  virtualenv = $(if $(filter $(require_virtualenv),no),not required,$(shell which python | grep -E virt\|venv))
+  $(if $(virtualenv),$(info virtualenv: $(virtualenv)),$(error virtualenv not detected))
+endif
