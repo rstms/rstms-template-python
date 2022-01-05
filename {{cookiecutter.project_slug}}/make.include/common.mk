@@ -1,9 +1,11 @@
 # common - initialization, variables, functions
 
 project != basename $$(pwd) | tr '-' '_'
-version != awk <$(project)/__init__.py -F\" '/^__version__/{print $$2}'
+organization != git remote get-url origin | sed 's-.*:--;s-/.*--'
+branch != git branch | awk '/\*/{print $$2}'
+version != awk <$(project)/version.py -F\" '/^__version__/{print $$2}'
 python_src != find . -name \*.py
-other_src := $(call makefiles) LICENSE README.rst setup.cfg tox.ini
+other_src := $(call makefiles) LICENSE README.rst
 src := $(python_src) $(other_src)
 
 # list make targets with descriptions

@@ -9,9 +9,12 @@ import sys
 import click
 {%- endif %}
 
+from .version import __version__, __timestamp__
+header = f"{__name__.split('.')[0]} v{__version__} {__timestamp__}"
+
 {% if cookiecutter.command_line_interface|lower == 'click' %}
 @click.command("{{cookiecutter.project_slug}}")
-@click.version_option()
+@click.version_option(message=header)
 @click.option("-d", "--debug", is_flag=True, help="debug mode")
 def cli(debug):
 
@@ -31,14 +34,15 @@ def cli(debug):
     return 0
 {%- endif %}
 {%- if cookiecutter.command_line_interface|lower == 'argparse' %}
-def main():
+def cli():
     """Console script for {{cookiecutter.project_slug}}."""
+    print(header)
     parser = argparse.ArgumentParser()
     parser.add_argument('_', nargs='*')
     args = parser.parse_args()
 
     print("Arguments: " + str(args._))
-    print("Replace this message by putting your code into {{cookiecutter.project_slug}}.cli.main")
+    raise RuntimeError("Add application code to {{cookiecutter.project_slug}}/cli.py")
     return 0
 {%- endif %}
 

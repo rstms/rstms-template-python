@@ -1,3 +1,77 @@
 [build-system]
+{%- if cookiecutter.build_with_flit == 'y' %}
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+requires_python = ">=3.8"
+{% else %}
 requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
+
+[options]
+packages = find
+{% endif %}
+
+
+[project]
+name = "{{ cookiecutter.project_slug }}"
+authors = [{name = "{{ cookiecutter.full_name }}", email = "{{ cookiecutter.email }}"}]
+readme = {file = "README.rst", content-type = "text/x-rst"}
+license = {file = "LICENSE"}
+keywords = "{{ cookiecutter.project_slug }}"
+classifiers = [
+  "Intended Audience :: Developers",
+{%- set license_classifiers = {
+  "MIT license": 'License :: OSI Approved :: MIT License',
+  "BSD license": 'License :: OSI Approved :: BSD License',
+  "ISC license": 'License :: OSI Approved :: ISC License (ISCL)',
+  "Apache Software License 2.0": 'License :: OSI Approved :: Apache Software License',
+  "GNU General Public License v3": 'License :: OSI Approved :: GNU General Public License v3 (GPLv3)'
+} %}
+  "Natural Language :: English", 
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.8",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10"
+]
+dynamic = ["version", "description"] 
+
+dependencies = [
+  {% if cookiecutter.command_line_interface|lower == 'click' %}"click == 8.0.3"{% endif %}
+]
+
+[project.optional-dependencies]
+dev = [
+  {% if cookiecutter.use_black == 'y' -%}"black==21.11b1",{% endif %}
+  "bump2version==1.0.1",
+  "coverage==6.2",
+  "flake8==4.0.1",
+  {% if cookiecutter.use_pytest == 'y' %}"pytest==6.2.5",{% endif %}
+  "tox==3.24.4"
+]
+docs = [
+  "sphinx==4.3.2",
+  "sphinx-click==3.0.2"
+]
+
+[project.urls]
+Home = "https://github.com/{{ cookiecutter.github_username }}/{{ cookiecutter.project_slug }}"
+
+[tool.flake8]
+exclude = "docs"
+{%- if cookiecutter.use_black == 'y' %}
+max-line-length = 79
+extend-ignore = "E203"
+
+[tool.isort]
+profile = "black"
+{%- endif %}
+
+{%- if cookiecutter.use_pytest == 'y' %}
+[tool.pytest]
+collect_ignore = ['setup.py']
+{%- endif %}
+
+{%- if 'no' not in cookiecutter.command_line_interface|lower %}
+[project.scripts]
+{{ cookiecutter.project_slug }} = "{{ cookiecutter.project_slug }}:cli"
+{%- endif %}

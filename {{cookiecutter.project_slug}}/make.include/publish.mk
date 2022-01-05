@@ -1,27 +1,39 @@
 # publish - build package and publish
 
+#.dist:	gitclean tox
+
+# create distributable files if sources have changed
 .PHONY: dist 
-dist: .dist ## create distributable files if sources have changed
-.dist:	gitclean tox
+dist: .dist
+.dist:	gitclean 
 	@echo Building $(project)
-	pip wheel -w wheels .
+	pip wheel -w dist .
 	@touch $@
 
-# add a release tag to the current commit and git push it
+release_args = '{\
+  "tag_name": "v$(version)",\
+  "target_commitish": "$(branch)",\
+  "name": "v$(version)",\
+  "body": "Release of version $(version)",\
+  "draft": false,\
+  "prerelease": false\
+}'
+release_url = https://api.github.com/repos/$(organization)/$(project)/releases
+release_header = -H 'Authorization: token ${GITHUB_TOKEN}'
+
+# create a github release from the current version
 release: dist 
 	@echo pushing Release $(project) v$(version) to github...
-	git tag -f -a 'v$(version)' -m 'Release v$(version)'
-	git push origin 'v$(version)'
-	
-{%- if cookiecutter.deploy_to_pypi == 'y' %}
+	curl $(release_header) --data $(release_args) $(release_url)
+
 # publish to pypi
-pypi-publish: release
+publish: release
 	$(call require_pypi_config)
-	$(call verify_action,publish to PyPi)
-	@set -e\
+	@set -e;\
 	if [ "$(version)" != "$(pypi_version)" ]; then \
+	  $(call verify_action,publish to PyPi) \
 	  echo publishing $(project) $(version) to PyPI...;\
-	  python -m twine upload dist/*;\
+	  flit publish;\
 	else \
 	  echo $(project) $(version) is up-to-date on PyPI;\
 	fi
@@ -31,11 +43,10 @@ pypi-check:
 	$(call require_pypi_config)
 	@echo '$(project) local=$(version) pypi=$(call check_pypi_version)'
 
-{%- endif %}
+# clean up publish generated files
 publish-clean:
 	rm -f .dist
 	rm -rf .tox
-{%- if cookiecutter.deploy_to_pypi == 'y' %}
 
 # functions
 define require_pypi_config =
@@ -50,4 +61,3 @@ $(if $(1),$(1),$(error $(2)))
 endef
 
 check_pypi_version = $(call check_null,$(pypi_version),PyPi version query failed)
-{%- endif %}

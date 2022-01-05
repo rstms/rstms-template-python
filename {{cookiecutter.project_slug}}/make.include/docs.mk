@@ -1,15 +1,18 @@
 # make clean targets
 
-docs: clean-docs ## generate Sphinx HTML documentation, including API docs
-	sphinx-apidoc -o docs/ {{ cookiecutter.project_slug }}
+# generate Sphinx HTML documentation, including API docs
+docs: clean-docs
+	pip install -U .[docs]
+	sphinx-apidoc -o docs/ $(project)
 	$(MAKE) -C docs html
-	$(MAKE) -C docs clean
 	$(browser) docs/_build/html/index.html
 
+# clean up documentation files
 clean-docs:
-	rm -f docs/{{ cookiecutter.project_slug }}.rst
+	rm -f docs/$(project).rst
 	rm -f docs/modules.rst
 	$(MAKE) -C docs clean
 
-servedocs: docs ## compile the docs watching for changes
+# run a dev-mode docs webserver; recompiling on changes 
+servedocs: docs
 	watchmedo shell-command -p '*.rst' -c '$(MAKE) -C docs html' -R -D .
