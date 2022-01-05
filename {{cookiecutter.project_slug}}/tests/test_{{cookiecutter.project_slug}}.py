@@ -70,11 +70,11 @@ class Test{{ cookiecutter.project_slug|title }}(unittest.TestCase):
     def test_command_line_interface(self):
         """Test the CLI."""
         runner = CliRunner()
-        result = runner.invoke(cli.main)
-        assert result.exit_code == 0
-        assert "{{ cookiecutter.project_slug }}.cli.main" in result.output
+        result = runner.invoke(cli)
+        assert result.exit_code == 0, result
+        assert "{{ cookiecutter.project_slug }}.cli" in result.output, result
         help_result = runner.invoke(cli.main, ["--help"])
-        assert help_result.exit_code == 0
-        assert "--help  Show this message and exit." in help_result.output
+        assert help_result.exit_code == 0, result
+        assert "--help  Show this message and exit." in help_result.output, result
 {%- endif %}
 {%- endif %}

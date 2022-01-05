@@ -21,12 +21,12 @@ def cli(debug):
         if debug:
             debug_hook(exception_type, exception, traceback)
         else:
-            logger.critical(f"{exception_type.__name__}: {exception}")
+            click.echo(f"{exception_type.__name__}: {exception}", err=True)
 
     sys.excepthook = exception_handler
 
     """cli for {{cookiecutter.project_slug}}."""
-    click.echo("Replace this message by putting your code into {{cookiecutter.project_slug}}.cli.main")
+    raise RuntimeError("Add application code to {{cookiecutter.project_slug}}/cli.py")
     return 0
 {%- endif %}
 {%- if cookiecutter.command_line_interface|lower == 'argparse' %}
