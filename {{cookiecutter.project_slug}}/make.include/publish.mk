@@ -1,11 +1,9 @@
 # publish - build package and publish
 
-#.dist:	gitclean tox
-
 # create distributable files if sources have changed
 .PHONY: dist 
 dist: .dist
-.dist:	gitclean 
+.dist:	gitclean tox
 	@echo Building $(project)
 	pip wheel -w dist .
 	@touch $@
