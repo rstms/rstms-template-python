@@ -1,13 +1,14 @@
 # lint / source format
 
+lint_src = $(project) tests docs
+
 # blacken python source (code formatter)
 fmt:  
-	black $(project) tests
+	isort $(lint_src)
+	black $(lint_src)
 
 # check style, lint with flake8
 lint: fmt
-	isort $(project) tests
-	flake8 $(project) tests
-	black --check $(project) tests
+	flake8 --config tox.ini $(lint_src)
 
 # vim:ft=make
