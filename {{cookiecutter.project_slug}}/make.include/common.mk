@@ -44,5 +44,5 @@ included = $(foreach file,$(makefiles),$(shell sed <$(file) -n 's/^\([[:alnum:]_
 # break if not in virtualenv (override with make require_virtualenv=no <TARGET>)
 ifndef virtualenv
   virtualenv = $(if $(filter $(require_virtualenv),no),not required,$(shell which python | grep -E virt\|venv))
-  $(if $(virtualenv),$(info virtualenv: $(virtualenv)),$(error virtualenv not detected))
+  $(if $(virtualenv),,$(error virtualenv not detected))
 endif
