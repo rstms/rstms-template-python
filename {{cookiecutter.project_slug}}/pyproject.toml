@@ -36,22 +36,22 @@ classifiers = [
 dynamic = ["version", "description"] 
 
 dependencies = [
-  {% if cookiecutter.command_line_interface|lower == 'click' %}"click == 8.0.3"{% endif %}
+  {% if cookiecutter.command_line_interface|lower == 'click' %}"click == 8.1.3"{% endif %}
 ]
 
 [project.optional-dependencies]
 dev = [
-  {% if cookiecutter.use_black == 'y' -%}"black==21.11b1",{% endif %}
+  {% if cookiecutter.use_black == 'y' -%}"black==22.3.0",{% endif %}
   "bump2version==1.0.1",
-  "coverage==6.2",
+  "coverage==6.4.1",
   "flake8==4.0.1",
-  {% if cookiecutter.use_pytest == 'y' %}"pytest==6.2.5",{% endif %}
-  "tox==3.24.4"
+  {% if cookiecutter.use_pytest == 'y' %}"pytest==7.1.2",{% endif %}
+  "tox==3.25.0"
 ]
 docs = [
   "sphinx==4.3.2",
   "sphinx-click==3.0.2",
-  "shpinx-rtd-theme==1.0.0"
+  "sphinx-rtd-theme==1.0.0"
 ]
 
 [project.urls]

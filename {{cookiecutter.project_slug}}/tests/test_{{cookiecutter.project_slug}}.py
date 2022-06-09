@@ -40,16 +40,17 @@ def test_version():
     assert isinstance(__version__, str)
 
 
-def test_command_line_interface():
+def test_cli_():
     """Test the CLI."""
     runner = CliRunner()
     result = runner.invoke(cli)
     assert result.exit_code != 0, result
-    assert "{{ cookiecutter.project_slug }}" in result.output
+    assert result.exception, result
+    assert "{{ cookiecutter.project_slug }}" in str(result.exception), result
 
     result = runner.invoke(cli, ["--help"])
     assert result.exit_code == 0, result
-    assert "Show this message and exit." in result.output
+    assert "Show this message and exit." in result.output, result
 {%- endif %}
 {%- else %}
 
@@ -71,8 +72,9 @@ class Test{{ cookiecutter.project_slug|title }}(unittest.TestCase):
         """Test the CLI."""
         runner = CliRunner()
         result = runner.invoke(cli)
-        assert result.exit_code == 0, result
-        assert "{{ cookiecutter.project_slug }}.cli" in result.output, result
+        assert result.exit_code != 0, result
+        assert result.exception, result
+        assert "{{ cookiecutter.project_slug }}.cli" in str(result.exception), result
         help_result = runner.invoke(cli, ["--help"])
         assert help_result.exit_code == 0, result
         assert "--help  Show this message and exit." in help_result.output, result
