@@ -40,7 +40,7 @@ def test_version():
     assert isinstance(__version__, str)
 
 
-def test_cli_():
+def test_cli():
     """Test the CLI."""
     runner = CliRunner()
     result = runner.invoke(cli)
