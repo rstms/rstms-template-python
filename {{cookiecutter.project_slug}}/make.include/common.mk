@@ -1,31 +1,73 @@
 # common - initialization, variables, functions
 
-project = {{ cookiecutter.project_slug }}
-organization = {{ cookiecutter.github_username }}
-branch != git branch | awk '/\*/{print $$2}'
-version != awk <$(project)/version.py -F\" '/^__version__/{print $$2}'
+# extract values from pyproject.toml
+pyproject_toml_section = sed <pyproject.toml '1,/\[$(1)\]/d;/^\[/,$$d'
+pyproject_toml_value = sed -n '/^\s*$(1)\s*=/s/^.*"\(.*\)".*$$/\1/p;'
+pyproject_toml_lookup = $(call pyproject_toml_section,$(1))|$(call pyproject_toml_value,$(2))
+
+# set make variables from project files
+project != $(call pyproject_toml_lookup,project,name)
+module != $(call pyproject_toml_lookup,tool.flit.module,name)
+cli != $(call pyproject_toml_section,project.scripts) | sed -n 's/^\(.*\)\s=.*$$/\1/p;q'
+version != grep __version__ $(module)/version.py | grep -o '[0-9.]*'
 python_src != find . -name \*.py
-other_src := $(call makefiles) LICENSE README.md
+other_src := $(call makefiles) pyproject.toml
 src := $(python_src) $(other_src)
 
-# list make targets with descriptions
+# sanity checks
+$(if $(project),,$(error failed to read project name from pyproject.toml))
+$(if $(shell [ -d ../"$(project)" ] || echo X),$(error project dir $(project) not found))
+$(if $(shell [ $$(readlink -e ../$(project)) = $$(readlink -e .) ] || echo X),$(error mismatch: $(project) != .))
+$(if $(module),,$(error failed to read module name from pyproject.toml))
+$(if $(shell [ -d "./$(module)" ] || echo missing),$(error module dir '$(module)' not found))
+$(if $(shell ls $(module)/__init__.py),,$(error expected "__init__.py" in module dir '$(module)'))
+$(if $(version),,$(error failed to read version from version.py))
+$(if $(cli),,$(error failed to read cli name from pyproject.toml))
+
+names:
+	@echo project=$(project)
+	@echo module=$(module)
+	@echo cli=$(cli)
+	@echo version=$(version)
+
+### list make targets with descriptions
 help:	
 	@set -e;\
-	(for file in $(call makefiles); do\
-	  echo "$$(head -1 $$file)";\
-	  sed <$$file -n -E \
-	  '/^#.*/{h;d}; s/^([[:alnum:]_-]+:).*/\1/; /^[[:alnum:]_-]+:/{G;s/:\n/\t/p}'; \
-	done) | awk -F'#' \
-	  'BEGIN{ first=1; print ".TS"; print "tab(#),box,nowarn;" } \
-	  /^#/{ if(first){ first=0; } else { print ".T&"; print "_ _"; } \
-	  print "cw(1i) s"; print "_ _"; print "c | l ."; print $$2; next; } \
-	  {print} END{print ".TE";}' |\
-	tbl | groff  -T utf8 | awk 'NF';
+	echo;\
+	echo 'Target        | Description';\
+	echo '------------- | --------------------------------------------------------------';\
+	for FILE in $(call makefiles); do\
+	  awk <$$FILE  -F':' '\
+	    BEGIN {help="begin"}\
+	    /^###.*/ { help=$$0; }\
+	    /^[a-z-]*:/ { if (last==help){ printf("%-14s| %s\n", $$1, substr(help,4));} }\
+	    /.*/{ last=$$0 }\
+	  ';\
+	done;\
+	echo
+
+short-help:
+	@echo "\nUsage: make TARGET\n";\
+	echo $$($(MAKE) --no-print-directory help | tail +4 | awk -F'|' '{print $$1}'|sort)|fold -s -w 60;\
+	echo
+
+
+### generate a random hex string 
+genkey:
+	@python -c 'import secrets; print(secrets.token_hex())'
+
+#
+# --- functions ---
+#
 
 # break with an error if there are uncommited changes
-gitclean:
-	$(if $(shell git status --porcelain),$(error "git status dirty, commit and push first"))
+define gitclean =
+	$(if $(and $(if $(ALLOW_DIRTY),,1),$(shell git status --porcelain)),$(error git status: dirty, commit and push first))
+endef
 
+
+# remove terminal color escape codes
+monochrome = sed -e 's/\x1B\[[0-9;]*[JKmsu]//g;' 
 
 # require user confirmation   example: $(call verify_action,do something destructive)
 define verify_action =
