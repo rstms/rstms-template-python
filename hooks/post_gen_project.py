@@ -30,3 +30,8 @@ if __name__ == '__main__':
 
     if '{{ cookiecutter.deploy_to_pypi }}' != 'y':
         remove_file('make.include/publish.mk')
+
+    project_dir = Path(PROJECT_DIRECTORY)
+    os.chdir(str(project_dir.parent))
+    project_dir.rename('{{ cookiecutter.project_name }}')
+
