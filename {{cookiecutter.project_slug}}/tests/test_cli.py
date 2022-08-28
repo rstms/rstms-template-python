@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""Tests for `{{ cookiecutter.project_slug }}` package."""
+"""Tests for `{{ cookiecutter.project_slug }}` CLI"""
 
 {% if cookiecutter.use_pytest == 'y' -%}
 import pytest
@@ -56,7 +56,7 @@ def test_cli(run):
     assert result.exit_code == 0
     assert '{{ cookiecutter.project_slug }}.cli.main' in result.output
 
-def test_help(run)
+def test_help(run):
     output = run(['--help'])
     assert '--help  Show this message and exit.' in output
 
