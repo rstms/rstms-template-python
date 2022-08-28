@@ -7,23 +7,21 @@ import pytest
 {% else %}
 import unittest
 {%- endif %}
+from traceback import print_exception
 
+import {{ cookiecutter.project_slug }}
 {%- if cookiecutter.command_line_interface|lower == 'click' %}
+from {{ cookiecutter.project_slug }} import __version__, cli
 from click.testing import CliRunner
-{%- endif %}
-
-from {{ cookiecutter.project_slug }} import {{ cookiecutter.project_slug }}
+{% else %}
 from {{ cookiecutter.project_slug }} import __version__
-
-{%- if cookiecutter.command_line_interface|lower == 'click' %}
-from {{ cookiecutter.project_slug }} import cli
 {%- endif %}
 
 {%- if cookiecutter.use_pytest == 'y' %}
 
 def test_version():
     """Test reading version and module name"""
-    assert {{ cookiecutter.project_slug }}.__name__ == "{{ cookiecutter.project_slug }}.{{ cookiecutter.project_slug }}"
+    assert {{ cookiecutter.project_slug }}.__name__ == "{{ cookiecutter.project_slug }}"
     assert __version__
     assert isinstance(__version__, str)
 
@@ -37,28 +35,29 @@ def run():
     #env['EXTRA_ENV_VAR'] = 'VALUE'
 
     def _run(cmd, **kwargs):
-        expected_exit = kwargs.pop("expected_input", 0)
+        expect_exit_code = kwargs.pop("expect_exit_code", 0)
+        expect_exception = kwargs.pop("expect_exception", None)
         #kwargs["env"] = env
         result = runner.invoke(cli, cmd, **kwargs)
         if result.exception:
-            print_exception(result.exception)
-            breakpoint()
-            pass
-        assert result.exit_code == expected_exit, result.output
-        return result.output
+            if not isinstance(result.exception, expect_exception):
+                print_exception(result.exception)
+                breakpoint()
+                pass
+        else:
+            assert result.exit_code == expect_exit_code, result.output
+        return result
 
     return _run
 
 def test_cli(run):
     """Test the CLI."""
-    runner = CliRunner()
-    result = runner.invoke(cli.main)
-    assert result.exit_code == 0
-    assert '{{ cookiecutter.project_slug }}.cli.main' in result.output
+    result = run([], expect_exception=RuntimeError)
+    assert '{{ cookiecutter.project_slug }}/cli.py' in str(result.exception)
 
 def test_help(run):
-    output = run(['--help'])
-    assert '--help  Show this message and exit.' in output
+    result = run(['--help'])
+    assert 'Show this message and exit.' in result.output
 
 {%- endif %}
 

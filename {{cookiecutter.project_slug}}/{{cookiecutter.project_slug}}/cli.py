@@ -18,9 +18,10 @@ header = f"{__name__.split('.')[0]} v{__version__} {__timestamp__}"
 @click.command("{{cookiecutter.project_slug}}")
 @click.version_option(message=header)
 @click.option("-d", "--debug", is_flag=True, help="debug mode")
-def cli(debug):
+@click.pass_context
+def cli(ctx, debug):
 
-    handler = ExceptionHandler(debug)
+    ctx.obj = dict(ehandler = ExceptionHandler(debug))
 
     """cli for {{cookiecutter.project_slug}}."""
     raise RuntimeError("Add application code to {{cookiecutter.project_slug}}/cli.py")

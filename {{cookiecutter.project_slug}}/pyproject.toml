@@ -48,9 +48,12 @@ dev = [
   {% if cookiecutter.use_black == 'y' -%}"black",{% endif %}
   "bump2version",
   "coverage",
+  "isort",
   "flake8",
+  "flake8-length",
   {% if cookiecutter.use_pytest == 'y' %}"pytest",{% endif %}
-  "tox=="
+  "python-box",
+  "tox"
 ]
 docs = [
   "sphinx",

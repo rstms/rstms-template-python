@@ -6,7 +6,7 @@ current_release = dist/$(module)-$(version)-release.json
 $(if $(GITHUB_ORG),,$(error GITHUB_ORG is undefined))
 $(if $(GITHUB_TOKEN),,$(error GITHUB_TOKEN is undefined))
 
-RELEASE = release -d\
+RELEASE = release \
   --organization $(GITHUB_ORG)\
   --repository $(project)\
   --token $(GITHUB_TOKEN)\
@@ -16,7 +16,7 @@ RELEASE = release -d\
 
 check_wheel = $(if $(shell [ -s $(current_wheel) ] && echo y),,$(error wheel file null or nonexistent))
 
-latest_release_version != $(RELEASE) -J latest
+latest_release_version != $(RELEASE) -J latest 2>/dev/null
 
 ### query github and output the latest release version
 latest-github-release:
