@@ -15,7 +15,7 @@ if __name__ == '__main__':
     if 'no' in '{{ cookiecutter.command_line_interface|lower }}':
         remove_file(os.path.join('{{ cookiecutter.project_slug }}', 'cli.py'))
 
-    if 'no' in '{{ cookiecutter.use_travis|lower }}':
+    if '{{ cookiecutter.use_travis|lower }}' != 'y':
         remove_file('.travis.yml')
         remove_file('CONTRIBUTING.rst')
 
@@ -25,5 +25,5 @@ if __name__ == '__main__':
     if 'Not open source' == '{{ cookiecutter.open_source_license }}':
         remove_file('LICENSE')
 
-    if 'no' in '{{ cookiecutter.deploy_to_pypy|lower }}':
-        remove_file(os.path.join('{{ make.include }}', 'publish.mk'))
+    if '{{ cookiecutter.deploy_to_pypi }}' != 'y':
+        remove_file('make.include/publish.mk')
