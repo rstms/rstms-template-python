@@ -1,36 +1,46 @@
 # test - testing with pytest and tox
 
-options ?= -x --log-cli-level 30
+options ?= -x --log-cli-level=CRITICAL
 testfiles ?= $(wildcard tests/test_*.py)
 options := $(if $(test),$(options) -k $(test),$(options))
 
-# run pytest;  example: make options=-svvvx test=cli test 
+tox_options ?=
+
+
+
+### run tests;  example: make options=-svvx test=cli test 
 test:
 	env TESTING=1 pytest $(options) $(testfiles)
 
-# run pytest, dropping into pdb on exceptions or breakpoints
+### run tests; drop into pdb on exceptions or breakpoints
 debug:
-	${MAKE} options="$(options) --log-cli-level 0 -xvvvs --pdb" test
+	@$(MAKE) --no-print-directory options="$(options) --log-cli-level=INFO -xvvvs --pdb" test
 
-# check code coverage quickly with the default Python
+### check code coverage quickly with the default Python
 coverage:
-	env TESTING=1 coverage run --source $(project) -m pytest
+	env TESTING=1 coverage run --source $(module) -m pytest
 	coverage report -m
 	coverage html
 	$(browser) htmlcov/index.html
 
-# show available test cases 
+### list test cases
 testls:
-	@echo $$($(foreach test,$(testfiles),grep -o '^def test_[[:graph:]]*' $(test);)) |\
-	  tr ' ' '\n' | grep -v def | awk -F\( 'BEGIN{xi=0} {printf("%s",$$1);\
-	  if(++xi==3){xi=0; printf("\n");} else {printf("\t");}}' |\
-	  awk 'BEGIN{print ".TS\nbox,nowarn;\nl | l | l ." } {print} END{print ".TE";}' |\
-	  tbl | groff  -T utf8 | awk 'NF';
+	@grep -h -R '^def test_' tests/test_*.py | awk -F'[ (]' '{print $$2}' | sort | uniq
 
-# test with tox if sources have changed
+
 .PHONY: tox
+### test with tox if sources have changed
 tox: .tox 
-.tox: $(python_src) tox.ini
-	tox
+.tox: $(src) tox.ini
+	$(call gitclean)
+	env PYTEST_OPTIONS='$(tox_options)' tox
 	@touch $@
 
+# run tox in debug mode
+toxdebug:
+	$(MAKE) --no-print-directory tox_options="-o log_cli_level=INFO -xvvvs --pdb" tox
+
+toxclean:
+	rm -rf .tox
+
+test-clean: toxclean

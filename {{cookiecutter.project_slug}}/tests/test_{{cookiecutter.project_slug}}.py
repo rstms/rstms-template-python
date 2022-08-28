@@ -16,28 +16,32 @@ from {{ cookiecutter.project_slug }} import __version__{% if cookiecutter.comman
 {%- if cookiecutter.use_pytest == 'y' %}
 
 
-@pytest.fixture
-def response():
-    """Sample pytest fixture.
-
-    See more at: http://doc.pytest.org/en/latest/fixture.html
-    """
-    # import requests
-    # return requests.get('https://github.com/audreyr/cookiecutter-pypackage')
-
-
-def test_content(response):
-    """Sample pytest test function with the pytest fixture as an argument."""
-    # from bs4 import BeautifulSoup
-    # assert 'GitHub' in BeautifulSoup(response.content).title.string
-{%- if cookiecutter.command_line_interface|lower == 'click' %}
-
-
 def test_version():
     """Test reading version and module name"""
     assert {{ cookiecutter.project_slug }}.__name__ == "{{ cookiecutter.project_slug }}.{{ cookiecutter.project_slug }}"
     assert __version__
     assert isinstance(__version__, str)
+
+@pytest.fixture
+def run():
+    runner = CliRunner()
+
+    #env = os.environ.copy()
+    #env['EXTRA_ENV_VAR'] = 'VALUE'
+
+    def _run(cmd, **kwargs):
+        expected_exit = kwargs.pop("expected_input", 0)
+        #kwargs["env"] = env
+        result = runner.invoke(cli, cmd, **kwargs)
+        if result.exception:
+            print_exception(result.exception)
+            breakpoint()
+            pass
+        assert result.exit_code == expected_exit, result.output
+        return result.output
+
+    return _run
+
 
 
 def test_cli():
