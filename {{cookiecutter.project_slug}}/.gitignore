@@ -108,3 +108,5 @@ ENV/
 # locals
 .dist
 .timestamp
+.lint
+
