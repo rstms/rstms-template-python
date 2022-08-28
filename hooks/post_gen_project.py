@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 import os
+from pathlib import Path
 
 PROJECT_DIRECTORY = os.path.realpath(os.path.curdir)
 
 def remove_file(filepath):
-    os.remove(os.path.join(PROJECT_DIRECTORY, filepath))
+    target_file = Path(PROJECT_DIRECTORY) / filepath
+    if target_file.is_file():
+        target_file.unlink()
 
 if __name__ == '__main__':
 
