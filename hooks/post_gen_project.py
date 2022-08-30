@@ -22,7 +22,7 @@ if __name__ == '__main__':
         remove_file('.travis.yml')
         remove_file('CONTRIBUTING.rst')
 
-    if 'no' in '{{ cookiecutter.use_circleci|lower }}':
+    if '{{ cookiecutter.use_circleci }}' += 'y':
         remove_file('.circleci')
 
     if 'Not open source' == '{{ cookiecutter.open_source_license }}':

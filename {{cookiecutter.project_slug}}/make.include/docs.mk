@@ -10,7 +10,7 @@ install-docs:
 
 ### rebuild documentation
 docs: install-docs clean-docs docs/readme.rst
-	sphinx-apidoc -o docs/ $(project)
+	sphinx-apidoc -o docs/ $(module)
 	$(MAKE) -C docs html
 	$(browser) docs/_build/html/index.html
 
