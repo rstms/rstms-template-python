@@ -18,7 +18,7 @@ check_wheel = $(if $(shell [ -s $(current_wheel) ] && echo y),,$(error wheel fil
 
 latest_release_version != $(RELEASE) -J latest 2>/dev/null
 
-### query github and output the latest release version
+# query github and output the latest release version
 latest-github-release:
 	@echo $(latest_release_version)
 
