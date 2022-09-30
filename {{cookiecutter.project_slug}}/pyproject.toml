@@ -53,6 +53,7 @@ dev = [
   "flake8-length",
   {% if cookiecutter.use_pytest == 'y' %}"pytest",{% endif %}
   "python-box",
+  "toml",
   "tox"
 ]
 docs = [
