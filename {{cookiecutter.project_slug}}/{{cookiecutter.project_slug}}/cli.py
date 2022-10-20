@@ -28,7 +28,7 @@ def _ehandler(ctx, option, debug):
 
 
 {% if cookiecutter.command_line_interface|lower == 'click' %}
-@click.group(context_settings={"auto_envvar_prefix": {{ cookiecutter.project_cli|upper }}"})
+@click.group(context_settings={"auto_envvar_prefix": "{{ cookiecutter.project_cli|upper }}"})
 @click.command("{{cookiecutter.project_slug}}")
 @click.version_option(message=header)
 @click.option("-d", "--debug", is_eager=True, is_flag=True, callback=_ehandler, help="debug mode")
