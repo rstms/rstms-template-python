@@ -81,5 +81,5 @@ collect_ignore = ['setup.py']
 
 {% if 'no' not in cookiecutter.command_line_interface|lower %}
 [project.scripts]
-{{ cookiecutter.project_name }} = "{{ cookiecutter.project_slug }}:cli"
+{{ cookiecutter.project_cli }} = "{{ cookiecutter.project_slug }}:cli"
 {%- endif %}
