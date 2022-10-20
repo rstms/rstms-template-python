@@ -1,13 +1,13 @@
-#!/usr/bin/env python
+# cli tests
 
-"""Tests for `{{ cookiecutter.project_slug }}` CLI"""
+import os
+import shlex
 
 {% if cookiecutter.use_pytest == 'y' -%}
 import pytest
 {% else %}
 import unittest
 {%- endif %}
-from traceback import print_exception
 
 import {{ cookiecutter.project_slug }}
 {%- if cookiecutter.command_line_interface|lower == 'click' %}
@@ -31,33 +31,63 @@ def test_version():
 def run():
     runner = CliRunner()
 
-    #env = os.environ.copy()
-    #env['EXTRA_ENV_VAR'] = 'VALUE'
+    env = os.environ.copy()
+    env['TESTING'] = '1'
 
     def _run(cmd, **kwargs):
-        expect_exit_code = kwargs.pop("expect_exit_code", 0)
-        expect_exception = kwargs.pop("expect_exception", None)
-        #kwargs["env"] = env
+        assert_exit = kwargs.pop("assert_exit", 0)
+        assert_exception = kwargs.pop("assert_exception", None)
+        env.update(kwargs.pop("env", {}))
+        kwargs["env"] = env
         result = runner.invoke(cli, cmd, **kwargs)
-        if result.exception:
-            if not isinstance(result.exception, expect_exception):
-                print_exception(result.exception)
-                breakpoint()
-                pass
-        else:
-            assert result.exit_code == expect_exit_code, result.output
+        if assert_exception is not None:
+            assert isinstance(result.exception, assert_exception)
+        elif result.exception is not None:
+            raise result.exception from result.exception
+        elif assert_exit is not None:
+            assert result.exit_code == assert_exit, (
+                f"Unexpected {result.exit_code=} (expected {assert_exit})\n"
+                f"cmd: '{shlex.join(cmd)}'\n"
+                f"output: {str(result.output)}"
+            )
         return result
 
     return _run
 
-def test_cli(run):
-    """Test the CLI."""
-    result = run([], expect_exception=RuntimeError)
-    assert '{{ cookiecutter.project_slug }}/cli.py' in str(result.exception)
+def test_cli_no_args(run):
+    result = run([])
+    assert "Usage:" in result.output
 
-def test_help(run):
+def test_cli_help(run):
     result = run(['--help'])
     assert 'Show this message and exit.' in result.output
+
+def test_cli_exception(run):
+
+    cmd = ["--shell-completion", "and_now_for_something_completely_different"]
+
+    with pytest.raises(RuntimeError) as exc:
+        result = run(cmd)
+    assert isinstance(exc.value, RuntimeError)
+
+    # example of testing for expected exception
+    result = run(cmd, assert_exception=RuntimeError)
+    assert result.exception
+    assert result.exc_info[0] == RuntimeError
+    assert result.exception.args[0] == "cannot determine shell"
+
+    with pytest.raises(AssertionError) as exc:
+        result = run(cmd, assert_exception=ValueError)
+    assert exc
+
+
+def test_cli_exit(run):
+    result = run(["--help"], assert_exit=None)
+    assert result
+    result = run(["--help"], assert_exit=0)
+    assert result
+    with pytest.raises(AssertionError):
+        run(['--help'], assert_exit=-1)
 
 {%- endif %}
 
