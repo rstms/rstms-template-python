@@ -31,7 +31,7 @@ def _ehandler(ctx, option, debug):
 @click.group("{{ cookiecutter.project_cli }}", context_settings={"auto_envvar_prefix": "{{ cookiecutter.project_cli|upper }}"})
 @click.version_option(message=header)
 @click.option("-d", "--debug", is_eager=True, is_flag=True, callback=_ehandler, help="debug mode")
-@click.option("--shell-completion", is_flag=True, flag_value="[auto]", callback=_shell_completion, help="configure shell completion")
+@click.option("--shell-completion", is_flag=False, flag_value="[auto]", callback=_shell_completion, help="configure shell completion")
 @click.pass_context
 def cli(ctx, debug, shell_completion):
     """{{cookiecutter.project_slug}} top-level help"""
