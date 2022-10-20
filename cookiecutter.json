@@ -4,7 +4,7 @@
   "github_username": "rstms",
   "project_name": "python-boilerplate",
   "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '_').replace('-', '_') }}",
-  "project_cli": "{{ cookiecutter.project_slug.split('_') | join('X') }}",
+  "project_cli": "{{ [ cookiecutter.project_slug.split('_') ] | slice(1)  | join('') }}",
   "project_short_description": "Python Boilerplate Package",
   "pypi_username": "{{ cookiecutter.github_username }}",
   "version": "0.0.1",
