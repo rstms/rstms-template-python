@@ -19,7 +19,7 @@ def _shell_completion(shell):
 
     if shell == "bash":
         click.echo(f"Writing file ~/.{cli}-complete.bash...")
-        system(f"_{cli.upper()_COMPLETE=bash_source {cli} >~/.{cli}-complete.bash")
+        system(f"_{cli.upper()}_COMPLETE=bash_source {cli} >~/.{cli}-complete.bash")
         click.echo("Source this file from ~/.bashrc")
         click.echo(f"ex: . ~/.{cli}-complete.bash")
 
