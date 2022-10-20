@@ -42,8 +42,8 @@ def cli(ctx, debug, shell_completion):
 @click.option("-f", "--flag", is_flag=True, help='example flag option')
 @click.option("-i", "--input-file", type=click.Path(dir_okay=False, readable=True, exists=True, path_type=Path), help="input file")
 @click.option("-o", "--output-file", type=click.Path(dir_okay=False, writable=True, exists=False, path_type=Path), help="output file")
-@click.argument('input', click.File('r'))
-@click.argument('output', click.File('w'), required=False, default='-')
+@click.argument('input', type=click.File('r'))
+@click.argument('output', type=click.File('w'), required=False, default='-')
 @click.pass_context
 def action(ctx, raises, flag, input_file, output_file, input, output):
     """action command help"""
