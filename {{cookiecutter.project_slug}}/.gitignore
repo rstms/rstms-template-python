@@ -111,3 +111,7 @@ ENV/
 .lint
 .fmt
 .release
+.depends
+docker/VERSION
+docker/.build
+docker/*.whl

@@ -1,2 +1,3 @@
 #!/bin/sh
-exec "$@"
+SERVICE_EXEC=${SERVICE_EXEC:-/bin/sh}
+exec ${SERVICE_EXEC} "$@"

@@ -52,6 +52,7 @@ dev = [
   "isort",
   "flake8",
   "flake8-length",
+  "pdbpp",
   {% if cookiecutter.use_pytest == 'y' %}"pytest",{% endif %}
   "python-box",
   "toml",

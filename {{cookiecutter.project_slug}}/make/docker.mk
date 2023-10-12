@@ -5,22 +5,28 @@
 $(if $(DOCKER_REGISTRY),,$(error DOCKER_REGISTRY is undefined))
 
 registry := $(DOCKER_REGISTRY)
-base_image := debian
-base_version := stable
+base_image := python
+base_version := alpine
 
-image_tag := $(registry)/$(project)
+image_tag := $(project)
 image := $(image_tag):latest
+docker_wheel := $(notdir $(wheel))
 
 build_opts := \
- --build-arg USER=$(USER) \
+ --build-arg USER=$(project) \
  --build-arg BASE_IMAGE=$(base_image):$(base_version) \
  --build-arg VERSION=$(version) \
+ --build-arg WHEEL=$(docker_wheel) \
+ --build-arg SERVICE_EXEC=$(cli) \
  --tag $(image_tag) \
  --progress plain
 
-docker_deps := $(wildcard docker/*) docker/VERSION
+docker_deps := $(wildcard docker/*) docker/VERSION docker/$(docker_wheel)
 	
 cleanup_files := docker/.build docker/VERSION docker/*.whl
+
+docker/$(docker_wheel): $(wheel)
+	cp $< $@
 
 docker/VERSION: VERSION
 	cp $< $@
@@ -49,3 +55,7 @@ docker-sterile: docker-clean
 push: build release
 	docker push $(image_tag):$(version)
 	docker push $(image)
+
+### run docker image
+run:
+	docker run -it --rm $(image) run
