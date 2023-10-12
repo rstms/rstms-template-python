@@ -4,20 +4,21 @@
  
 $(if $(DOCKER_REGISTRY),,$(error DOCKER_REGISTRY is undefined))
 
-registry = $(DOCKER_REGISTRY)
-base_version = $(shell repo-release seven-testnet)
+registry := $(DOCKER_REGISTRY)
+base_image := debian
+base_version := stable
 
-base_image = debian:11
-image_tag = $(registry)/$(project)
-image = $(image_tag):latest
+image_tag := $(registry)/$(project)
+image := $(image_tag):latest
 
-build_opts = \
- --build-arg BASE_IMAGE=$(base_image) \
+build_opts := \
+ --build-arg USER=$(USER) \
+ --build-arg BASE_IMAGE=$(base_image):$(base_version) \
  --build-arg VERSION=$(version) \
  --tag $(image_tag) \
  --progress plain
 
-docker_deps = $(wildcard docker/*) docker/VERSION
+docker_deps := $(wildcard docker/*) docker/VERSION
 	
 cleanup_files := docker/.build docker/VERSION docker/*.whl
 

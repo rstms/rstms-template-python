@@ -1,7 +1,7 @@
 # python lint makefile
 
-lint_line_length = 120
-lint_python_version = 310
+lint_line_length := 120
+lint_python_version := 310
 
 .fmt: $(python_src)
 	isort --py $(lint_python_version) --profile black $(src_dirs)

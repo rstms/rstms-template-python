@@ -1,7 +1,11 @@
 ### create a new github release
 
+.PHONY: release latest-release release-clean release-sterile
+
+latest_release := $(shell gh release view --json tagName --jq .tagName)
+
 .release: $(wheel)
-ifeq "$(version)" "$(subst v,,$(shell gh -R $(GITHUB_ORG)/$(project) release view --json name --jq .name))"
+ifeq "v$(version)" "$(latest_release)"
 	@echo version $(version) is already released
 else
 	gh release create v$(version) --generate-notes --target master;
@@ -9,7 +13,8 @@ else
 endif
 	@touch $@
 
-latest_release = $(shell gh -R $(GITHUB_ORG)/$(1) release list -L 1 | awk -F'[v\t]*' '/^v/{print $$2}')
+latest-release:
+	@echo $(latest_release)
 
 release: .release
 

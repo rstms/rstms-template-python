@@ -1,10 +1,13 @@
 # common - initialization, variables, functions
 
+.PHONY: showvars
+
 # set make variables from project files
 project := $(shell tq -r .project.name pyproject.toml)
 module := $(shell tq -r .tool.flit.module.name pyproject.toml)
 version := $(shell cat VERSION)
 src_dirs := $(module) tests
+makefiles := Makefile $(wildcard make/*.mk)
 python_src := $(foreach dir,$(src_dirs),$(wildcard $(dir)/*.py))
 other_src := $(makefiles) pyproject.toml
 src := $(python_src) $(other_src)
@@ -20,15 +23,26 @@ $(if $(shell [ -d "./$(module)" ] || echo missing),$(error module dir '$(module)
 $(if $(shell ls $(module)/__init__.py),,$(error expected "__init__.py" in module dir '$(module)'))
 $(if $(version),,$(error failed to read version from version.py))
 
+hidden_vars := hidden_vars .DEFAULT_GOAL CURDIR MAKEFILE_LIST MAKEFLAGS SHELL BROWSER_PYSCRIPT BUMPVERSION_CFG
+
 names:
 	@echo project=$(project)
 	@echo module=$(module)
 	@echo cli=$(cli)
 	@echo version=$(version)
-	@echo src_dirs=$(src_dirs)
-	@echo git_commit=$(git_commit)
 	@echo wheel=$(wheel)
+	@echo git_commit=$(git_commit)
 
+showvars:
+	$(foreach var,\
+	    $(sort $(filter-out $(hidden_vars),$(.VARIABLES))),\
+	    $(if $(filter-out recursive%,$(flavor $(var))),\
+	    	$(if $(filter file%,$(origin $(var))),\
+	    		$(info $(var)=$($(var)))\
+	    	,)\
+	    ,)\
+	)
+	@:
 	
 ### list make targets with descriptions
 help:	
@@ -36,7 +50,7 @@ help:
 	echo;\
 	echo 'Target        | Description';\
 	echo '------------- | --------------------------------------------------------------';\
-	for FILE in $(call makefiles); do\
+	for FILE in $(makefiles); do\
 	  awk <$$FILE  -F':' '\
 	    BEGIN {help="begin"}\
 	    /^##.*/ { help=$$0; }\

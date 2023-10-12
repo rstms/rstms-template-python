@@ -1,11 +1,7 @@
 # python test makefile 
 test_cases := $(if $(test),-k $(test),)
 
-ifndef EXTERNAL_SERVER
-EXTERNAL_SERVER = 0
-endif
-
-test_env = chamber exec $(project)/test -- env TESTING=1 DEBUG=1
+test_env := env TESTING=1 DEBUG=1
 
 ifdef ENABLE_SLOW_TESTS
 pytest_opts := $(pytest_opts) --run_slow
@@ -34,9 +30,9 @@ coverage:
 	coverage report -m
 
 # tox dependency sources
-tox-src = $(filter-out $(module)/version.py,$(python_src))
+tox_src := $(filter-out $(module)/version.py,$(python_src))
 
-.tox: $(tox-src) tox.ini
+.tox: $(tox_src) tox.ini
 	$(if $(DISABLE_TOX),@echo 'tox is disabled',$(test_env) tox)
 
 ### run tests under tox

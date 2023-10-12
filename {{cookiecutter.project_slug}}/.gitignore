@@ -109,4 +109,5 @@ ENV/
 .dist
 .timestamp
 .lint
-
+.fmt
+.release

@@ -1,7 +1,7 @@
 # python dist makefile
 
-wheel = dist/$(module)-$(version)-py2.py3-none-any.whl
-dependency_wheels = $(filter-out $(wildcard dist/*.whl),$(wheel))
+wheel := dist/$(module)-$(version)-py2.py3-none-any.whl
+dependency_wheels := $(filter-out $(wildcard dist/*.whl),$(wheel))
 
 $(wheel): $(src) pyproject.toml
 	rm -f dist/$(module)-*.whl
