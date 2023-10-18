@@ -112,6 +112,9 @@ ENV/
 .fmt
 .release
 .depends
+.black
+.errors
+.flake8
 docker/VERSION
 docker/.build
 docker/*.whl
