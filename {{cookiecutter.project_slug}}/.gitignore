@@ -118,3 +118,4 @@ ENV/
 docker/VERSION
 docker/.build
 docker/*.whl
+postactivate
