@@ -31,7 +31,7 @@ import {{ cookiecutter.project_slug }}  # noqa: E402
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode' {% if cookiecutter.command_line_interface|lower == 'click' %}, 'sphinx_click'{% endif %}]
+extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode', "pallets_sphinx_themes'{% if cookiecutter.command_line_interface|lower == 'click' %}, 'sphinx_click'{% endif %}]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -64,7 +64,7 @@ release = {{ cookiecutter.project_slug }}.__version__
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = os.environ['LANG']
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -83,7 +83,7 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'flask'
 
 # Theme options are theme-specific and customize the look and feel of a
 # theme further.  For a list of options available for each theme, see the

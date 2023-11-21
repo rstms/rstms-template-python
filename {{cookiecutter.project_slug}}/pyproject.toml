@@ -49,6 +49,7 @@ dev = [
   {% if cookiecutter.use_black == 'y' -%}"black",{% endif %}
   "bump2version",
   "coverage",
+  "devtools",
   "isort",
   "flake8",
   "flake8-length",
@@ -62,7 +63,7 @@ docs = [
   "m2r2",
   "sphinx",
   "sphinx-click",
-  "sphinx-rtd-theme"
+  "pallets-sphinx-themes"
 ]
 
 [project.urls]

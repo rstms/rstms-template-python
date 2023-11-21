@@ -4,8 +4,9 @@ define BROWSER_PYSCRIPT
 import os, webbrowser, sys
 
 from urllib.request import pathname2url
-
-webbrowser.open("file://" + pathname2url(os.path.abspath(sys.argv[1])))
+from pathlib import Path
+path = Path(sys.argv[1]).resolve().relative_to(Path.home())
+webbrowser.open("file:///$(BROWSER_PREFIX)" + pathname2url(str(path)))
 endef
 
 export BROWSER_PYSCRIPT
