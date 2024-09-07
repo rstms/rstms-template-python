@@ -3,7 +3,7 @@
 lint_line_length := 120
 lint_python_version := 310
 
-ISORT_OPTS = --py $(lint_python_version) --profile black
+ISORT_OPTS = --py $(lint_python_version) --profile black --gitignore
 BLACK_OPTS = --target-version py$(lint_python_version) --line-length $(lint_line_length)
 FLAKE8_OPTS = --max-line-length $(lint_line_length)
 
