@@ -12,7 +12,7 @@ python_src := $(foreach dir,$(src_dirs),$(wildcard $(dir)/*.py))
 other_src := $(makefiles) pyproject.toml
 src := $(python_src) $(other_src)
 git_commit := $(shell git log -1 | awk '/^commit/{print $$2}')
-cli := $(shell tq -r '.project.scripts|keys|.[0]' pyproject.toml)
+cli := $(shell grep 'project\.scripts' pyproject.toml && tq -r '.project.scripts|keys|.[0]' pyproject.toml)
 
 # sanity checks
 $(if $(project),,$(error failed to read project name from pyproject.toml))
