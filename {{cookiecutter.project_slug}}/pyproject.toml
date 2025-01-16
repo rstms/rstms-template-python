@@ -14,7 +14,7 @@ packages = find
 
 [project]
 name = "{{ cookiecutter.project_name }}"
-version = "1.0.0"
+version = "1.0.1"
 authors = [{name = "{{ cookiecutter.full_name }}", email = "{{ cookiecutter.email }}"}]
 readme = {file = "README.md", content-type = "text/markdown"}
 license = {file = "LICENSE"}
