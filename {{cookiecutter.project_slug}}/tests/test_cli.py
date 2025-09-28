@@ -55,7 +55,7 @@ def run():
     return _run
 
 def test_cli_no_args(run):
-    result = run([])
+    result = run([], assert_exception=SystemExit)
     assert "Usage:" in result.output
 
 def test_cli_help(run):

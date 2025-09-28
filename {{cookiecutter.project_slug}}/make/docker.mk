@@ -1,8 +1,8 @@
 #
 # docker makefile
 #
- 
-$(if $(DOCKER_REGISTRY),,$(error DOCKER_REGISTRY is undefined))
+
+ifdef DOCKER_REGISTRY
 
 registry := $(DOCKER_REGISTRY)
 base_image := python
@@ -59,3 +59,13 @@ push: build release
 ### run docker image
 run:
 	docker run -it --rm $(image) run
+
+else 
+
+docker-clean:
+	@:
+
+docker-sterile:
+	@:
+
+endif
